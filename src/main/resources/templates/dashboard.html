@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoffeeHR - Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Header - same as other pages */
+        .header {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            padding: 10px 20px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .logo i {
+            background: rgba(255,255,255,0.2);
+            padding: 8px;
+            border-radius: 8px;
+            margin-right: 10px;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+        }
+
+        .header-actions i {
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .header-actions i:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 20px;
+            padding: 20px;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-radius: 15px;
+            padding: 25px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .user-profile {
+            text-align: center;
+            padding: 0 25px 25px;
+            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 25px;
+        }
+
+        .user-profile img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            border: 3px solid #ff6b35;
+        }
+
+        .user-profile h3 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+
+        .user-profile p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .menu-item {
+            padding: 12px 25px;
+            display: flex;
+            align-items: center;
+            color: #666;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: linear-gradient(90deg, rgba(255,107,53,0.1) 0%, transparent 100%);
+            color: #ff6b35;
+            border-left-color: #ff6b35;
+        }
+
+        .menu-item i {
+            width: 20px;
+            margin-right: 15px;
+            font-size: 16px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .welcome-title {
+            color: #ff6b35;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .welcome-subtitle {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .current-time {
+            color: #333;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            opacity: 0.1;
+            transform: translate(30px, -30px);
+        }
+
+        .stat-card.employees::before {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .stat-card.departments::before {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+        }
+
+        .stat-card.salary::before {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .stat-card.new-employees::before {
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .stat-icon.employees {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .stat-icon.departments {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+        }
+
+        .stat-icon.salary {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .stat-icon.new-employees {
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat-change.positive {
+            color: #28a745;
+        }
+
+        .stat-change.negative {
+            color: #dc3545;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .action-card {
+            border: 2px solid #f0f0f0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+        }
+
+        .action-card:hover {
+            border-color: #ff6b35;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255,107,53,0.2);
+            color: #333;
+        }
+
+        .action-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            color: #ff6b35;
+        }
+
+        .action-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .action-description {
+            font-size: 13px;
+            color: #666;
+        }
+
+        /* Recent Activities */
+        .recent-activities {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: white;
+        }
+
+        .activity-icon.add {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .activity-icon.edit {
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+        }
+
+        .activity-icon.delete {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .welcome-section, .stat-card, .quick-actions, .recent-activities {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+    <div class="header-content">
+        <div class="logo">
+            <i class="fas fa-coffee"></i>
+            CoffeeHR
+        </div>
+
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Tìm kiếm nhanh..." id="searchInput">
+        </div>
+
+        <div class="header-actions">
+            <i class="fas fa-bell" title="Thông báo"></i>
+            <i class="fas fa-envelope" title="Tin nhắn"></i>
+            <i class="fas fa-cog" title="Cài đặt"></i>
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=center&q=60"
+                 alt="User" class="user-avatar">
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="user-profile">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=center&q=60"
+                 alt="Admin">
+            <h3 sec:authentication="name">HR Manager</h3>
+            <p>Quản lý nhân sự</p>
+        </div>
+
+        <nav>
+            <a href="/" class="menu-item active">
+                <i class="fas fa-home"></i>
+                Dashboard
+            </a>
+            <a href="/employees" class="menu-item">
+                <i class="fas fa-users"></i>
+                Danh sách nhân viên
+            </a>
+            <a href="/employees/new" class="menu-item">
+                <i class="fas fa-user-plus"></i>
+                Thêm nhân viên
+            </a>
+            <a href="/salaries" class="menu-item">
+                <i class="fas fa-money-bill-wave"></i>
+                Bảng lương
+            </a>
+            <a href="/departments" class="menu-item">
+                <i class="fas fa-building"></i>
+                Phòng ban
+            </a>
+            <a href="/reports" class="menu-item">
+                <i class="fas fa-chart-bar"></i>
+                Báo cáo
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <h1 class="welcome-title">
+                <i class="fas fa-chart-line"></i>
+                Dashboard Overview
+            </h1>
+            <p class="welcome-subtitle">Chào mừng trở lại! Đây là tổng quan về hệ thống HR của bạn.</p>
+            <div class="current-time">
+                <i class="fas fa-clock"></i>
+                <span id="currentDateTime"></span>
+            </div>
+        </section>
+
+        <!-- Statistics Grid -->
+        <section class="stats-grid">
+            <div class="stat-card employees">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-value" th:text="${totalEmployees ?: 0}">0</div>
+                        <div class="stat-label">Tổng nhân viên</div>
+                    </div>
+                    <div class="stat-icon employees">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span th:text="${newEmployeesThisMonth ?: 0}">0</span> mới tháng này
+                </div>
+            </div>
+
+            <div class="stat-card departments">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-value" th:text="${totalDepartments ?: 0}">0</div>
+                        <div class="stat-label">Phòng ban</div>
+                    </div>
+                    <div class="stat-icon departments">
+                        <i class="fas fa-building"></i>
+                    </div>
+                </div>
+                <div class="stat-change">
+                    <i class="fas fa-minus"></i>
+                    Không thay đổi
+                </div>
+            </div>
+
+            <div class="stat-card salary">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-value" th:text="${averageSalary ?: '0'}">0</div>
+                        <div class="stat-label">Lương TB (triệu)</div>
+                    </div>
+                    <div class="stat-icon salary">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                </div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    +5.2% so với tháng trước
+                </div>
+            </div>
+
+            <div class="stat-card new-employees">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-value" th:text="${newEmployeesThisMonth ?: 0}">0</div>
+                        <div class="stat-label">Nhân viên mới</div>
+                    </div>
+                    <div class="stat-icon new-employees">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                </div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    Tăng 20% so với tháng trước
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="quick-actions">
+            <h2 class="section-title">
+                <i class="fas fa-bolt"></i>
+                Thao tác nhanh
+            </h2>
+            <div class="actions-grid">
+                <a href="/employees/new" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="action-title">Thêm nhân viên</div>
+                    <div class="action-description">Thêm nhân viên mới vào hệ thống</div>
+                </a>
+
+                <a href="/departments/new" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="action-title">Tạo phòng ban</div>
+                    <div class="action-description">Tạo phòng ban mới</div>
+                </a>
+
+                <a href="/salaries" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <div class="action-title">Tính lương</div>
+                    <div class="action-description">Xem và tính toán bảng lương</div>
+                </a>
+
+                <a href="/reports" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="action-title">Báo cáo</div>
+                    <div class="action-description">Xem báo cáo chi tiết</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Recent Activities -->
+        <section class="recent-activities">
+            <h2 class="section-title">
+                <i class="fas fa-history"></i>
+                Hoạt động gần đây
+            </h2>
+
+            <div class="activity-item" th:each="activity : ${recentActivities}">
+                <div class="activity-icon" th:classappend="${activity.type}">
+                    <i th:class="${activity.icon}"></i>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title" th:text="${activity.description}">Thêm nhân viên mới: Nguyễn Văn A</div>
+                    <div class="activity-time" th:text="${activity.timeAgo}">2 phút trước</div>
+                </div>
+            </div>
+
+            <!-- Default activities if no data -->
+            <div th:if="${#lists.isEmpty(recentActivities)}">
+                <div class="activity-item">
+                    <div class="activity-icon add">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">Hệ thống khởi tạo thành công</div>
+                        <div class="activity-time">Vừa xong</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    // Update current time
+    function updateTime() {
+        const now = new Date();
+        const options = {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        };
+        document.getElementById('currentDateTime').textContent =
+            now.toLocaleDateString('vi-VN', options);
+    }
+
+    updateTime();
+    setInterval(updateTime, 60000); // Update every minute
+
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+
+        if (searchTerm.length > 2) {
+            // You can implement AJAX search here
+            console.log('Searching for:', searchTerm);
+        }
+    });
+
+    // Add click analytics
+    document.querySelectorAll('.action-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const action = this.querySelector('.action-title').textContent;
+            console.log('Quick action clicked:', action);
+        });
+    });
+</script>
+</body>
+</html>
