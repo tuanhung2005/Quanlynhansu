@@ -31,6 +31,10 @@ public class EmployeeService {
         return employeeRepository.findById(id);
     }
 
+    public Optional<Employee> getEmployeeByEmail(String email) {
+        return employeeRepository.findByEmail(email);
+    }
+
     public List<Employee> getEmployeesByDepartment(Long departmentId) {
         return employeeRepository.findByDepartmentId(departmentId);
     }

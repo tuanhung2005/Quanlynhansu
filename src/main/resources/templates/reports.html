@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoffeeHR - Trang Chủ</title>
+    <title>CoffeeHR - Báo Cáo</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
@@ -176,6 +176,72 @@
             opacity: 0.9;
         }
 
+        /* Filter Section */
+        .filter-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid #e9ecef;
+        }
+
+        .filter-section h3 {
+            color: #495057;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .filter-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 20px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-control {
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
         /* Statistics Cards */
         .stats-grid {
             display: grid;
@@ -215,19 +281,19 @@
             opacity: 1;
         }
 
-        .stat-card.employees {
+        .stat-card.total-salary {
             background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
         }
 
-        .stat-card.departments {
+        .stat-card.avg-salary {
             background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
         }
 
-        .stat-card.salary {
+        .stat-card.new-employees {
             background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
         }
 
-        .stat-card.new-employees {
+        .stat-card.total-employees {
             background: linear-gradient(135deg, #6f42c1 0%, #6610f2 100%);
         }
 
@@ -275,7 +341,7 @@
 
         .section h3 i {
             margin-right: 10px;
-            color: #ff6b35;
+            color: #667eea;
         }
 
         .employee-item {
@@ -298,7 +364,7 @@
             height: 45px;
             border-radius: 50%;
             margin-right: 15px;
-            border: 2px solid #ff6b35;
+            border: 2px solid #667eea;
         }
 
         .employee-info {
@@ -322,69 +388,65 @@
             font-size: 14px;
         }
 
-        .department-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background: white;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .department-name {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .department-count {
-            background: #ff6b35;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .action-card {
+        .monthly-chart {
             background: white;
             padding: 20px;
             border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            text-decoration: none;
-            color: inherit;
+            margin-top: 20px;
         }
 
-        .action-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            color: inherit;
-        }
-
-        .action-card i {
-            font-size: 2em;
-            color: #ff6b35;
+        .chart-bar {
+            display: flex;
+            align-items: center;
             margin-bottom: 10px;
         }
 
-        .action-card h4 {
-            color: #333;
-            margin-bottom: 5px;
+        .chart-label {
+            width: 80px;
+            font-size: 12px;
+            color: #666;
         }
 
-        .action-card p {
-            color: #666;
+        .chart-bar-container {
+            flex: 1;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            margin: 0 10px;
+            overflow: hidden;
+        }
+
+        .chart-bar-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        .chart-value {
+            width: 40px;
+            text-align: right;
             font-size: 12px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Filter Results */
+        .filter-results {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #1976d2;
+        }
+
+        .filter-results h4 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .filter-results p {
+            color: #424242;
+            margin: 5px 0;
         }
 
         /* Responsive */
@@ -403,6 +465,10 @@
             }
 
             .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-form {
                 grid-template-columns: 1fr;
             }
 
@@ -443,7 +509,6 @@
         <div class="header-actions">
             <i class="fas fa-bell" title="Thông báo"></i>
             <i class="fas fa-envelope" title="Tin nhắn"></i>
-            <i class="fas fa-cog" title="Cài đặt"></i>
             <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=center&q=60"
                  alt="User" class="user-avatar">
         </div>
@@ -461,7 +526,7 @@
         </div>
 
         <nav>
-            <a href="/dashboard" class="menu-item active">
+            <a href="/dashboard" class="menu-item">
                 <i class="fas fa-home"></i>
                 Trang chủ
             </a>
@@ -489,7 +554,7 @@
                 <i class="fas fa-crown"></i>
                 Lương cao nhất
             </a>
-            <a href="/reports" class="menu-item">
+            <a href="/reports" class="menu-item active">
                 <i class="fas fa-chart-bar"></i>
                 Báo cáo
             </a>
@@ -504,32 +569,76 @@
     <main class="main-content">
         <!-- Welcome Section -->
         <div class="welcome-section">
-            <h1>🎉 Chào mừng đến với CoffeeHR</h1>
-            <p>Hệ thống quản lý nhân sự thông minh và hiện đại</p>
+            <h1>📊 Báo Cáo Tổng Quan</h1>
+            <p>Thống kê chi tiết về nhân sự và lương của công ty</p>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <h3>🔍 Lọc Báo Cáo</h3>
+            <form th:action="@{/reports/filter}" method="post" class="filter-form">
+                <div class="form-group">
+                    <label for="reportType">Loại Báo Cáo:</label>
+                    <select id="reportType" name="reportType" class="form-control" required>
+                        <option value="">-- Chọn loại báo cáo --</option>
+                        <option value="monthly" th:selected="${reportType == 'monthly'}">Báo cáo theo tháng</option>
+                        <option value="yearly" th:selected="${reportType == 'yearly'}">Báo cáo theo năm</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="year">Năm:</label>
+                    <select id="year" name="year" class="form-control" required>
+                        <option value="">-- Chọn năm --</option>
+                        <option th:each="year : ${#numbers.sequence(2020, 2030)}" 
+                                th:value="${year}" 
+                                th:text="${year}"
+                                th:selected="${selectedYear != null and selectedYear == year}">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group" id="monthGroup" style="display: none;">
+                    <label for="month">Tháng:</label>
+                    <select id="month" name="month" class="form-control">
+                        <option value="">-- Chọn tháng --</option>
+                        <option th:each="month : ${#numbers.sequence(1, 12)}" 
+                                th:value="${month}" 
+                                th:text="${month}"
+                                th:selected="${selectedMonth != null and selectedMonth == month}">
+                        </option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">🔍 Xem Báo Cáo</button>
+            </form>
+        </div>
+
+        <!-- Filter Results -->
+        <div th:if="${reportType != null}" class="filter-results">
+            <h4>📋 Kết Quả Báo Cáo</h4>
+            <p th:if="${reportType == 'monthly'}">
+                <strong>Tháng:</strong> <span th:text="${selectedMonth}"></span>/<span th:text="${selectedYear}"></span>
+            </p>
+            <p th:if="${reportType == 'yearly'}">
+                <strong>Năm:</strong> <span th:text="${selectedYear}"></span>
+            </p>
+            <p><strong>Nhân viên mới:</strong> <span th:text="${newEmployeesCount}"></span> người</p>
+            <p><strong>Tổng lương:</strong> <span th:text="${#numbers.formatDecimal(totalSalaryPeriod, 0, 'COMMA', 0, 'POINT')}"></span> VNĐ</p>
         </div>
 
         <!-- Statistics -->
         <div class="stats-grid">
-            <div class="stat-card employees">
-                <div class="stat-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <div class="stat-value" th:text="${totalEmployees}">0</div>
-                <div class="stat-label">Tổng nhân viên</div>
-            </div>
-            <div class="stat-card departments">
-                <div class="stat-icon">
-                    <i class="fas fa-building"></i>
-                </div>
-                <div class="stat-value" th:text="${totalDepartments}">0</div>
-                <div class="stat-label">Phòng ban</div>
-            </div>
-            <div class="stat-card salary">
+            <div class="stat-card total-salary">
                 <div class="stat-icon">
                     <i class="fas fa-money-bill-wave"></i>
                 </div>
+                <div class="stat-value" th:text="${#numbers.formatDecimal(totalSalary, 0, 'COMMA', 0, 'POINT')}">0</div>
+                <div class="stat-label">Tổng lương toàn công ty</div>
+            </div>
+            <div class="stat-card avg-salary">
+                <div class="stat-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
                 <div class="stat-value" th:text="${#numbers.formatDecimal(avgSalary, 0, 'COMMA', 0, 'POINT')}">0</div>
-                <div class="stat-label">Lương trung bình (VNĐ)</div>
+                <div class="stat-label">Lương trung bình</div>
             </div>
             <div class="stat-card new-employees">
                 <div class="stat-icon">
@@ -538,13 +647,20 @@
                 <div class="stat-value" th:text="${newEmployeesThisMonth}">0</div>
                 <div class="stat-label">Nhân viên mới tháng này</div>
             </div>
+            <div class="stat-card total-employees">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-value" th:text="${totalEmployees}">0</div>
+                <div class="stat-label">Tổng nhân viên</div>
+            </div>
         </div>
 
         <!-- Content Sections -->
         <div class="content-sections">
             <!-- Top Paid Employees -->
             <div class="section">
-                <h3><i class="fas fa-crown"></i> Top 5 Lương Cao Nhất</h3>
+                <h3><i class="fas fa-crown"></i> Top 10 Lương Cao Nhất</h3>
                 <div th:each="employee : ${topPaidEmployees}">
                     <div class="employee-item">
                         <img th:src="@{https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=center&q=60}"
@@ -563,63 +679,85 @@
                 </div>
             </div>
 
-            <!-- Employees by Department -->
+            <!-- Monthly Chart -->
             <div class="section">
-                <h3><i class="fas fa-building"></i> Nhân Viên Theo Phòng Ban</h3>
-                <div th:each="entry : ${employeesByDepartment}">
-                    <div class="department-item">
-                        <div class="department-name" th:text="${entry.key}">Tên phòng ban</div>
-                        <div class="department-count" th:text="${entry.value}">0</div>
+                <h3><i class="fas fa-chart-bar"></i> Nhân Viên Mới Theo Tháng</h3>
+                <div class="monthly-chart">
+                    <div th:each="entry : ${newEmployeesByMonth}" class="chart-bar">
+                        <div class="chart-label" th:text="${entry.key} + '">Tháng</div>
+                        <div class="chart-bar-container">
+                            <div class="chart-bar-fill" th:style="'width: ' + ${entry.value > 0 ? (entry.value * 20) : 0} + 'px;'"></div>
+                        </div>
+                        <div class="chart-value" th:text="${entry.value}">0</div>
                     </div>
-                </div>
-                <div th:if="${#maps.isEmpty(employeesByDepartment)}" style="text-align: center; color: #666; padding: 20px;">
-                    <i class="fas fa-building" style="font-size: 2em; margin-bottom: 10px; opacity: 0.3;"></i>
-                    <p>Chưa có dữ liệu phòng ban</p>
+                    <div th:if="${#maps.isEmpty(newEmployeesByMonth)}" style="text-align: center; color: #666; padding: 20px;">
+                        <i class="fas fa-chart-bar" style="font-size: 2em; margin-bottom: 10px; opacity: 0.3;"></i>
+                        <p>Chưa có dữ liệu thống kê</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="quick-actions">
-            <a href="/employees" class="action-card">
-                <i class="fas fa-users"></i>
-                <h4>Quản lý nhân viên</h4>
-                <p>Xem và quản lý danh sách nhân viên</p>
-            </a>
-            <a href="/employees/new" class="action-card">
-                <i class="fas fa-user-plus"></i>
-                <h4>Thêm nhân viên</h4>
-                <p>Thêm nhân viên mới vào hệ thống</p>
-            </a>
-            <a href="/salaries" class="action-card">
-                <i class="fas fa-money-bill-wave"></i>
-                <h4>Bảng lương</h4>
-                <p>Xem bảng lương và thống kê</p>
-            </a>
-            <a href="/salary-calculation" class="action-card">
-                <i class="fas fa-calculator"></i>
-                <h4>Tính lương</h4>
-                <p>Tính toán tổng lương theo thời gian</p>
-            </a>
-            <a href="/salaries/average" class="action-card">
-                <i class="fas fa-chart-line"></i>
-                <h4>Lương trung bình</h4>
-                <p>Xem lương trung bình theo phòng ban</p>
-            </a>
-            <a href="/salaries/highest" class="action-card">
-                <i class="fas fa-crown"></i>
-                <h4>Lương cao nhất</h4>
-                <p>Xem nhân viên có lương cao nhất</p>
-            </a>
+        <!-- Filtered Employees List -->
+        <div th:if="${filteredEmployees != null and !filteredEmployees.isEmpty()}" class="section" style="margin-top: 30px;">
+            <h3><i class="fas fa-list"></i> Danh Sách Nhân Viên Theo Bộ Lọc</h3>
+            <div class="table-container">
+                <table class="employee-table" style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #f8f9fa;">
+                            <th style="padding: 12px; text-align: left;">Họ Tên</th>
+                            <th style="padding: 12px; text-align: left;">Email</th>
+                            <th style="padding: 12px; text-align: left;">Phòng Ban</th>
+                            <th style="padding: 12px; text-align: left;">Ngày Vào Làm</th>
+                            <th style="padding: 12px; text-align: left;">Lương (VNĐ)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="employee : ${filteredEmployees}" style="border-bottom: 1px solid #f0f0f0;">
+                            <td style="padding: 12px;" th:text="${employee.fullName}">Tên nhân viên</td>
+                            <td style="padding: 12px;" th:text="${employee.email}">email@example.com</td>
+                            <td style="padding: 12px;" th:text="${employee.department != null ? employee.department.name : 'Chưa phân công'}">Phòng ban</td>
+                            <td style="padding: 12px;" th:text="${#temporals.format(employee.hireDate, 'dd/MM/yyyy')}">01/01/2024</td>
+                            <td style="padding: 12px; color: #28a745; font-weight: 600;" th:text="${#numbers.formatDecimal(employee.salary, 0, 'COMMA', 0, 'POINT')}">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 </div>
 
 <script>
-    // Add hover effects for action cards
+    // Show/hide month selector based on report type
+    document.getElementById('reportType').addEventListener('change', function() {
+        const monthGroup = document.getElementById('monthGroup');
+        const monthSelect = document.getElementById('month');
+        
+        if (this.value === 'monthly') {
+            monthGroup.style.display = 'block';
+            monthSelect.required = true;
+        } else {
+            monthGroup.style.display = 'none';
+            monthSelect.required = false;
+        }
+    });
+
+    // Initialize month selector visibility
     document.addEventListener('DOMContentLoaded', function() {
-        const actionCards = document.querySelectorAll('.action-card');
-        actionCards.forEach(card => {
+        const reportType = document.getElementById('reportType');
+        const monthGroup = document.getElementById('monthGroup');
+        const monthSelect = document.getElementById('month');
+        
+        if (reportType.value === 'monthly') {
+            monthGroup.style.display = 'block';
+            monthSelect.required = true;
+        }
+    });
+
+    // Add hover effects for stat cards
+    document.addEventListener('DOMContentLoaded', function() {
+        const statCards = document.querySelectorAll('.stat-card');
+        statCards.forEach(card => {
             card.addEventListener('mouseenter', function() {
                 this.style.transform = 'translateY(-8px) scale(1.02)';
             });
@@ -628,18 +766,7 @@
                 this.style.transform = 'translateY(0) scale(1)';
             });
         });
-
-        // Add click effects for stat cards
-        const statCards = document.querySelectorAll('.stat-card');
-        statCards.forEach(card => {
-            card.addEventListener('click', function() {
-                this.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 150);
-            });
-        });
     });
 </script>
 </body>
-</html>
+</html> 

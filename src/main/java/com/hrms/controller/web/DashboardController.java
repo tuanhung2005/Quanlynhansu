@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -17,7 +18,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
-public class HomeController {
+@RequestMapping("/dashboard")
+public class DashboardController {
 
     @Autowired
     private EmployeeService employeeService;
@@ -25,8 +27,8 @@ public class HomeController {
     @Autowired
     private DepartmentService departmentService;
 
-    @GetMapping("/")
-    public String home(Model model) {
+    @GetMapping
+    public String dashboard(Model model) {
         try {
             // Lấy dữ liệu tổng quan
             List<Employee> employees = employeeService.getAllEmployees();
@@ -89,14 +91,4 @@ public class HomeController {
             return "error";
         }
     }
-
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
-    @GetMapping("/logout-success")
-    public String logoutSuccess() {
-        return "redirect:/login?logout";
-    }
-}
+} 

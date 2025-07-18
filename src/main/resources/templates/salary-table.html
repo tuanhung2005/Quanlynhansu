@@ -277,6 +277,16 @@
             background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
         }
 
+        .stat-card.total-salary:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+        }
+
+        .stat-card.total-salary:hover .stat-icon {
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
+        }
+
         .stat-card.avg-salary {
             background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
         }
@@ -296,7 +306,7 @@
         }
 
         .stat-value {
-            font-size: 2.2em;
+            font-size: 1.8em;
             font-weight: bold;
             margin-bottom: 5px;
         }
@@ -546,7 +556,11 @@
                 <i class="fas fa-money-bill-wave"></i>
                 Bảng lương
             </a>
-            <a href="#" class="menu-item">
+            <a href="/salary-calculation" class="menu-item">
+                <i class="fas fa-calculator"></i>
+                Tính tổng lương
+            </a>
+            <a href="/reports" class="menu-item">
                 <i class="fas fa-chart-bar"></i>
                 Báo cáo
             </a>
@@ -588,6 +602,10 @@
                     <i class="fas fa-arrow-left"></i>
                     Quay lại danh sách
                 </a>
+                <a href="/salary-calculation" class="back-btn" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); margin-left: 10px;">
+                    <i class="fas fa-calculator"></i>
+                    Tính tổng lương
+                </a>
                 <span sec:authorize="hasRole('ADMIN')">
                         <a href="/employees/new" class="add-btn">
                             <i class="fas fa-plus"></i>
@@ -606,27 +624,43 @@
                 <div class="stat-value" th:text="${employees?.size() ?: 0}">0</div>
                 <div class="stat-label">Tổng nhân viên</div>
             </div>
-            <div class="stat-card total-salary">
-                <div class="stat-icon">
-                    <i class="fas fa-calculator"></i>
+            <a href="/salary-calculation" style="text-decoration: none; color: inherit;" title="Click để tính tổng lương chi tiết">
+                <div class="stat-card total-salary" style="cursor: pointer; transition: transform 0.3s ease;">
+                    <div class="stat-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <div class="stat-value">Tính toán</div>
+                    <div class="stat-label">Tổng lương (VNĐ)</div>
+                    <div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">
+                        <i class="fas fa-mouse-pointer"></i> Click để tính chi tiết
+                    </div>
                 </div>
-                <div class="stat-value" th:text="${totalSalary ?: 0}">0</div>
-                <div class="stat-label">Tổng lương (VNĐ)</div>
-            </div>
-            <div class="stat-card avg-salary">
-                <div class="stat-icon">
-                    <i class="fas fa-chart-line"></i>
+            </a>
+            <a href="/salaries/average" style="text-decoration: none; color: inherit;" title="Click để xem lương trung bình theo phòng ban">
+                <div class="stat-card avg-salary" style="cursor: pointer; transition: transform 0.3s ease;">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-value">Xem chi tiết</div>
+                    <div class="stat-label">Lương trung bình</div>
+                    <div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">
+                        <i class="fas fa-mouse-pointer"></i> Click để xem chi tiết
+                    </div>
                 </div>
-                <div class="stat-value" th:text="${avgSalary ?: 0}">0</div>
-                <div class="stat-label">Lương trung bình</div>
-            </div>
-            <div class="stat-card highest-salary">
-                <div class="stat-icon">
-                    <i class="fas fa-crown"></i>
+            </a>
+
+            <a href="/salaries/highest" style="text-decoration: none; color: inherit;" title="Click để xem lương cao nhất theo phòng ban">
+                <div class="stat-card highest-salary" style="cursor: pointer; transition: transform 0.3s ease;">
+                    <div class="stat-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div class="stat-value">Xem chi tiết</div>
+                    <div class="stat-label">Lương cao nhất</div>
+                    <div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">
+                        <i class="fas fa-mouse-pointer"></i> Click để xem chi tiết
+                    </div>
                 </div>
-                <div class="stat-value" th:text="${maxSalary ?: 0}">0</div>
-                <div class="stat-label">Lương cao nhất</div>
-            </div>
+            </a>
         </div>
 
         <!-- Salary Table -->
@@ -658,11 +692,11 @@
                         </div>
                     </td>
                     <td>
-                        <span class="department-badge" th:text="${employee.department ?: 'Chưa phân công'}">IT</span>
+                        <span class="department-badge" th:text="${employee.department != null ? employee.department.name : 'Chưa phân công'}">IT</span>
                     </td>
                     <td th:text="${#temporals.format(employee.hireDate, 'dd/MM/yyyy')}">01/01/2024</td>
                     <td>
-                        <span class="salary-amount" th:text="${#numbers.formatDecimal(employee.baseSalary, 0, 'COMMA', 0, 'POINT')}">15,000,000</span>
+                        <span class="salary-amount" th:text="${#numbers.formatDecimal(employee.salary, 0, 'COMMA', 0, 'POINT')}">15,000,000</span>
                     </td>
                     <td>
                         <span class="status-badge status-active">Đang làm việc</span>
@@ -720,6 +754,30 @@
                 element.textContent = parseInt(value).toLocaleString('vi-VN');
             }
         });
+
+        // Add click effect for total salary card
+        const totalSalaryCard = document.querySelector('.stat-card.total-salary');
+        if (totalSalaryCard) {
+            totalSalaryCard.addEventListener('click', function() {
+                // Add a brief animation effect
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        }
+
+        // Add click effect for highest salary card
+        const highestSalaryCard = document.querySelector('.stat-card.highest-salary');
+        if (highestSalaryCard) {
+            highestSalaryCard.addEventListener('click', function() {
+                // Add a brief animation effect
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        }
     });
 </script>
 </body>

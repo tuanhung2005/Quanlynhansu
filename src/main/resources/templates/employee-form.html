@@ -14,7 +14,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
             min-height: 100vh;
         }
 
@@ -174,6 +174,7 @@
             border-radius: 15px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            min-height: 600px;
         }
 
         .content-header {
@@ -349,21 +350,22 @@
             background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
+            padding: 10px 22px;
+            border-radius: 22px;
             font-weight: 600;
+            font-size: 15px;
             cursor: pointer;
             transition: all 0.3s;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            box-shadow: 0 2px 8px rgba(255,107,53,0.08);
         }
 
         .add-employee-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255,107,53,0.4);
-            color: white;
+            background: #e55a30;
+            color: #fff;
         }
 
         /* Responsive */
@@ -412,65 +414,107 @@
     /*                                                  */
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px 28px;
+            margin-bottom: 24px;
+            min-height: 400px;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
         }
 
         .form-label {
-            margin-bottom: 6px;
+            margin-bottom: 7px;
             color: #333;
+            font-weight: 500;
+            font-size: 15px;
         }
 
         .required::after {
             content: " *";
-            color: red;
+            color: #ff6b35;
             margin-left: 2px;
         }
 
         .form-input,
         .form-select {
-            padding: 10px 14px;
-            border: 1px solid #ccc;
+            padding: 11px 15px;
+            border: 1.5px solid #e0e7ff;
             border-radius: 10px;
-            font-size: 14px;
-            transition: border-color 0.3s;
+            font-size: 15px;
+            background: #f8fafc;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
 
         .form-input:focus,
         .form-select:focus {
             border-color: #ff6b35;
             outline: none;
+            box-shadow: 0 0 0 2px #ffe5d0;
+        }
+
+        .form-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            min-height: 45px;
+            display: block !important;
+        }
+
+        .invalid-feedback {
+            color: #e74c3c;
+            font-size: 13px;
+            margin-top: 3px;
+            font-style: italic;
+            min-height: 18px;
         }
 
         .form-actions {
             margin-top: 30px;
-            display: flex;
-            gap: 15px;
+            display: flex !important;
+            gap: 18px;
             justify-content: flex-start;
+            padding: 20px 0;
+            border-top: 1px solid #e0e7ff;
+            background: #fff;
+            position: relative;
+            z-index: 10;
+            min-height: 60px;
         }
 
         .btn {
-            display: inline-flex;
+            display: inline-flex !important;
             align-items: center;
-            gap: 6px;
-            padding: 10px 20px;
+            gap: 7px;
+            padding: 11px 26px;
             border: none;
-            border-radius: 25px;
-            font-size: 14px;
+            border-radius: 22px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
             transition: 0.3s;
             text-decoration: none;
+            min-width: 100px;
+            justify-content: center;
         }
 
         .btn-primary {
             background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
             color: white;
+            box-shadow: 0 2px 8px rgba(255,107,53,0.10);
         }
 
         .btn-primary:hover {
@@ -478,14 +522,55 @@
         }
 
         .btn-secondary {
-            background: #ddd;
+            background: #f3f4f6;
             color: #333;
+            border: 1.5px solid #e0e7ff;
         }
 
         .btn-secondary:hover {
-            background: #ccc;
+            background: #e0e7ff;
         }
-    /*                                      */
+
+        /* Alert styles */
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 16px;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .alert ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+
+
+        /* Form styles */
+        form {
+            display: block !important;
+            min-height: 500px;
+        }
+        @media (max-width: 900px) {
+            .main-content {
+                padding: 18px 6vw;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn {
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -539,7 +624,7 @@
                 <i class="fas fa-money-bill-wave"></i>
                 Bảng lương
             </a>
-            <a href="#" class="menu-item">
+            <a href="/reports" class="menu-item">
                 <i class="fas fa-chart-bar"></i>
                 Báo cáo
             </a>
@@ -582,62 +667,77 @@
             </a>
         </div>
 
-        <form th:action="@{/employees}" th:object="${employee}" method="post">
+        <form th:action="@{/employees/save}" th:object="${employee}" method="post">
+            <!-- Hiển thị tổng hợp lỗi đầu form -->
+            <div th:if="${#fields.hasErrors()}" class="alert alert-danger">
+                <ul>
+                    <li th:each="err : ${#fields.errors()}" th:text="${err}"></li>
+                </ul>
+            </div>
+            
+            <!-- Hiển thị lỗi chung -->
+            <div th:if="${error}" class="alert alert-danger">
+                <strong>Lỗi:</strong> <span th:text="${error}"></span>
+            </div>
             <div class="form-grid">
                 <div class="form-group">
                     <label class="form-label required" for="firstName">Họ</label>
-                    <input type="text" th:field="*{firstName}" id="firstName" class="form-input" placeholder="Nguyễn">
+                    <input type="text" th:field="*{firstName}" id="firstName" class="form-input" placeholder="Nguyễn" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label required" for="lastName">Tên</label>
-                    <input type="text" th:field="*{lastName}" id="lastName" class="form-input" placeholder="Văn A">
+                    <input type="text" th:field="*{lastName}" id="lastName" class="form-input" placeholder="Văn A" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
                 </div>
 
                 <div class="form-group full-width">
                     <label class="form-label required" for="email">Email</label>
-                    <input type="email" th:field="*{email}" id="email" class="form-input" placeholder="example@gmail.com">
+                    <input type="email" th:field="*{email}" id="email" class="form-input" placeholder="example@gmail.com" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label required" for="phone">Số điện thoại</label>
-                    <input type="text" th:field="*{phone}" id="phone" class="form-input" placeholder="0123456789">
+                    <input type="text" th:field="*{phoneNumber}" id="phone" class="form-input" placeholder="0123456789" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label required" for="salary">Lương cơ bản</label>
-                    <input type="number" step="0.01" th:field="*{salary}" id="salary" class="form-input" placeholder="15000000">
+                    <input type="number" step="0.01" th:field="*{salary}" id="salary" class="form-input" placeholder="15000000" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}"></div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label required" for="department">Phòng ban</label>
-                    <select th:field="*{department}" id="department" class="form-select">
+                    <select name="department.id" id="department" class="form-select" required>
                         <option value="">-- Chọn phòng ban --</option>
                         <option th:each="dept : ${departments}"
-                                th:value="${dept}"
-                                th:text="${dept.name}">
-                        </option>
+                                th:value="${dept.id}"
+                                th:text="${dept.name}"></option>
                     </select>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('department')}" th:errors="*{department}"></div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label required" for="hireDate">Ngày vào làm</label>
-                    <input type="date" th:field="*{hireDate}" id="hireDate" class="form-input">
+                    <input type="date" th:field="*{hireDate}" id="hireDate" class="form-input" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('hireDate')}" th:errors="*{hireDate}"></div>
                 </div>
 
-                <div class="form-group full-width">
+                <div class="form-group">
                     <label class="form-label required" for="status">Trạng thái</label>
-                    <select th:field="*{status}" id="status" class="form-select">
+                    <select th:field="*{status}" id="status" class="form-select" required>
                         <option value="">-- Chọn trạng thái --</option>
-                        <option th:each="st : ${T(com.hrms.entity.EmployeeStatus).values()}"
-                                th:value="${st}"
-                                th:text="${st == T(com.hrms.entity.EmployeeStatus).ACTIVE ? 'Đang làm việc' :
-                                     st == T(com.hrms.entity.EmployeeStatus).INACTIVE ? 'Nghỉ việc' : st}">
-                        </option>
+                        <option value="ACTIVE">Đang làm việc</option>
+                        <option value="INACTIVE">Nghỉ việc</option>
+                        <option value="TERMINATED">Đã thôi việc</option>
                     </select>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></div>
                 </div>
             </div>
-
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save"></i> Lưu
@@ -646,12 +746,36 @@
                     <i class="fas fa-times"></i> Hủy
                 </a>
             </div>
+
         </form>
     </main>
 </div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        // Debug form elements
+        console.log('Form loaded successfully');
+        
+        const statusSelect = document.getElementById('status');
+        const saveButton = document.querySelector('button[type="submit"]');
+        const form = document.querySelector('form');
+        
+        console.log('Status select:', statusSelect);
+        console.log('Save button:', saveButton);
+        console.log('Form:', form);
+        
+        if (statusSelect) {
+            console.log('Status options:', statusSelect.options.length);
+            for (let i = 0; i < statusSelect.options.length; i++) {
+                console.log('Option', i, ':', statusSelect.options[i].text, '=', statusSelect.options[i].value);
+            }
+        }
+        
+        if (saveButton) {
+            console.log('Save button text:', saveButton.textContent);
+            console.log('Save button visible:', saveButton.offsetParent !== null);
+        }
+
         const searchInput = document.getElementById('searchInput');
         const rows = document.querySelectorAll('.employee-table tbody tr');
 
@@ -685,6 +809,30 @@
                 }
             });
         });
+        
+        // Form validation
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                console.log('Form submitted');
+                const requiredFields = form.querySelectorAll('[required]');
+                let isValid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        isValid = false;
+                        field.style.borderColor = '#e74c3c';
+                        console.log('Missing required field:', field.name);
+                    } else {
+                        field.style.borderColor = '#e0e7ff';
+                    }
+                });
+                
+                if (!isValid) {
+                    e.preventDefault();
+                    alert('Vui lòng điền đầy đủ thông tin bắt buộc');
+                }
+            });
+        }
     });
 </script>
 </body>

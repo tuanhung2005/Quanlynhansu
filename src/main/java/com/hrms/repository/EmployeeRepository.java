@@ -21,4 +21,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     @Query("SELECT e FROM Employee e WHERE e.firstName LIKE %:name% OR e.lastName LIKE %:name%")
     List<Employee> findByNameContaining(@Param("name") String name);
+
+    java.util.Optional<Employee> findByEmail(String email);
 }

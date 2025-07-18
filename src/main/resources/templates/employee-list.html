@@ -48,30 +48,7 @@
             margin-right: 10px;
         }
 
-        .search-bar {
-            flex: 1;
-            max-width: 500px;
-            margin: 0 20px;
-            position: relative;
-        }
 
-        .search-bar input {
-            width: 100%;
-            padding: 12px 20px 12px 45px;
-            border: none;
-            border-radius: 25px;
-            font-size: 14px;
-            background: rgba(255,255,255,0.95);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .search-bar i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #666;
-        }
 
         .header-actions {
             display: flex;
@@ -381,12 +358,6 @@
                 flex-direction: column;
                 gap: 15px;
             }
-
-            .search-bar {
-                order: 3;
-                max-width: none;
-                margin: 0;
-            }
         }
 
         /* Animations */
@@ -419,15 +390,9 @@
             CoffeeHR
         </div>
 
-        <div class="search-bar">
-            <i class="fas fa-search"></i>
-            <input type="text" placeholder="Nhập nội dung tìm kiếm" id="searchInput">
-        </div>
-
         <div class="header-actions">
             <i class="fas fa-bell"></i>
             <i class="fas fa-envelope"></i>
-            <i class="fas fa-cog"></i>
             <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
                  alt="User" class="user-avatar">
         </div>
@@ -461,7 +426,7 @@
                 <i class="fas fa-money-bill-wave"></i>
                 Bảng lương
             </a>
-            <a href="#" class="menu-item">
+            <a href="/reports" class="menu-item">
                 <i class="fas fa-chart-bar"></i>
                 Báo cáo
             </a>
@@ -504,12 +469,16 @@
             </a>
         </div>
 
+        <!-- Thông báo thành công -->
+        <div th:if="${successMessage}" class="alert alert-success" style="margin-bottom: 20px; padding: 15px; background: #d4edda; border: 1px solid #c3e6cb; border-radius: 5px; color: #155724;">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${successMessage}"></span>
+        </div>
+
         <div class="filter-tabs">
-            <a href="/employees" class="filter-tab active">🔍 Tìm kiếm</a>
             <a href="/employees/new" class="filter-tab">➕ Thêm nhân viên</a>
             <a href="/salaries" class="filter-tab">💰 Bảng lương</a>
-            <a href="#" class="filter-tab">📊 Báo cáo</a>
-            <a href="#" class="filter-tab">⚙️ Cài đặt</a>
+            <a href="/reports" class="filter-tab">📊 Báo cáo</a>
         </div>
 
         <div class="table-container">
@@ -530,24 +499,23 @@
                     <td>
                         <div class="employee-info">
                             <img th:src="@{https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=center&q=60}"
-                                 th:alt="${employee.firstName + ' ' + employee.lastName}"
+                                 th:alt="${employee.firstName != null ? employee.firstName : ''} + ' ' + ${employee.lastName != null ? employee.lastName : ''}"
                                  class="employee-avatar">
                             <div>
-                                <div class="employee-name" th:text="${employee.firstName + ' ' + employee.lastName}">Trần Tuấn Linh</div>
-                                <div class="employee-id" th:text="${employee.email}">tuanlinh9812@gmail.com</div>
+                                <div class="employee-name" th:text="${employee.firstName != null ? employee.firstName : ''} + ' ' + ${employee.lastName != null ? employee.lastName : ''}">Trần Tuấn Linh</div>
+                                <div class="employee-id" th:text="${employee.email != null ? employee.email : ''}">tuanlinh9812@gmail.com</div>
                             </div>
                         </div>
                     </td>
-                    <td><span class="specialization-badge" th:text="${employee.department}">IT</span></td>
-                    <td th:text="${employee.position}">Developer</td>
-                    <td style="color: #28a745; font-weight: 600;" th:text="${#numbers.formatCurrency(employee.baseSalary)}">15,000,000 ₫</td>
-                    <td th:text="${#temporals.format(employee.hireDate, 'dd/MM/yyyy')}">09/10/2020</td>
+                    <td><span class="specialization-badge" th:text="${employee.department != null ? employee.department.name : ''}">IT</span></td>
+                    <td th:text="${employee.position != null ? employee.position : ''}">Developer</td>
+                    <td style="color: #28a745; font-weight: 600;" th:text="${employee.salary != null ? #numbers.formatCurrency(employee.salary) : ''}">15,000,000 ₫</td>
+                    <td th:text="${employee.hireDate != null ? #temporals.format(employee.hireDate, 'dd/MM/yyyy') : ''}">09/10/2020</td>
                     <td><span class="status-badge status-active">Đang làm việc</span></td>
                     <td>
                         <a th:href="@{/employees/{id}(id=${employee.id})}" class="action-btn">👁️ Xem</a>
-                        <a th:href="@{/employees/{id}/edit(id=${employee.id})}" class="action-btn success">✏️ Sửa</a>
-                        <button class="action-btn secondary"
-                                th:onclick="'confirmDelete(' + ${employee.id} + ')'">🗑️ Xóa</button>
+                        <a th:href="@{/employees/edit/{id}(id=${employee.id})}" class="action-btn success">✏️ Sửa</a>
+                        <a th:href="@{/employees/delete/{id}(id=${employee.id})}" class="action-btn danger" onclick="return confirm('Bạn có chắc chắn muốn xóa nhân viên này?');">🗑️ Xóa</a>
                     </td>
                 </tr>
 
@@ -569,23 +537,7 @@
 </div>
 
 <script>
-    // Search functionality
-    document.getElementById('searchInput').addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        const rows = document.querySelectorAll('.employee-table tbody tr');
 
-        rows.forEach(row => {
-            const name = row.querySelector('.employee-name')?.textContent.toLowerCase() || '';
-            const email = row.querySelector('.employee-id')?.textContent.toLowerCase() || '';
-            const department = row.querySelector('.specialization-badge')?.textContent.toLowerCase() || '';
-
-            if (name.includes(searchTerm) || email.includes(searchTerm) || department.includes(searchTerm)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    });
 
     // Delete confirmation
     function confirmDelete(employeeId) {
@@ -606,6 +558,20 @@
                 e.preventDefault();
             }
         });
+    });
+
+    // Auto-hide success message
+    document.addEventListener('DOMContentLoaded', function() {
+        const successAlert = document.querySelector('.alert-success');
+        if (successAlert) {
+            setTimeout(function() {
+                successAlert.style.transition = 'opacity 0.5s';
+                successAlert.style.opacity = '0';
+                setTimeout(function() {
+                    successAlert.remove();
+                }, 500);
+            }, 5000);
+        }
     });
 </script>
 </body>
